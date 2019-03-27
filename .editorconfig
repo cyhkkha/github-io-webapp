@@ -1,0 +1,20 @@
+# editorconfig.org
+
+# 是否是根目录
+root = true
+
+# 该规则全局适用
+[*]
+
+# 编码格式
+charset = utf-8
+# tab制表符类型
+indent_style = space
+# tab缩进大小
+indent_size = 4
+# 换行类型 CR = \r   LF = \n  windows默认使用CRLF
+end_of_line = crlf
+# 在文件的结尾插入空行
+insert_final_newline = true
+# 删除行末的空格
+trim_trailing_whitespace = true

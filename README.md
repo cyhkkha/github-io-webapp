@@ -1,2 +1,13 @@
 # github-io-webapp
-cyhkkha.github.io front-end
+
+by 菲尼莫斯 2019年3月27日
+
+---
+
+https://cyhkkha.github.io 前端项目
+
+install：`npm run install`
+
+start：`npm run start`
+
+build: `npm run build`
