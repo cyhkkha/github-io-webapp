@@ -1,5 +1,21 @@
-@media (max-width: 992px) {
-    .basic-navbar-form {
-        margin-top: 0.5rem;
-    }
+.nav {
+    padding-left: 20px;
+    padding-right: 5px;
+    border: #eee solid 1px;
+}
+
+.nav .nav-title {
+    padding-left: 45px;
+    margin-bottom: auto;
+    background-image: url('../../images/logo-40.jpg');
+    background-repeat: no-repeat;
+    background-position: 0 5px;
+    background-size: 35px 35px;
+}
+
+.nav .nav-search {
+    width: 250px;
+    margin-left: 20px;
+    position: relative;
+    top: -3px;
 }
