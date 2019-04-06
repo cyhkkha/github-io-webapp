@@ -1,0 +1,20 @@
+@import '~antd/dist/antd.css';
+
+.app-container {
+    padding: 1rem;
+}
+
+.ds-ib {
+    display: inline-block;
+}
+
+.flex-between {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.ml-ss {
+    margin-left: 0.5em;
+}
