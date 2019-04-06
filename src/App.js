@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+import './App.css';
 import Navbar from './components/layout/Navbar';
-import Guitar from './components/guitar-fingerboard/index'
-import 'bootstrap/dist/css/bootstrap.css';
+import FretSound from './components/guitar/fret-sound';
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
+            <div className="app">
                 <Navbar />
-                <Guitar />
+                <div className="app-container">
+                    <FretSound />
+                </div>
             </div>
         );
     }
