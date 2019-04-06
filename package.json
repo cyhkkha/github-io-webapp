@@ -1,6 +1,7 @@
 {
   "name": "github-io-webapp",
   "version": "0.1.0",
+  "homepage" : "http://cyhkkha.github.io/github-io-webapp",
   "private": true,
   "dependencies": {
     "antd": "^3.16.1",
