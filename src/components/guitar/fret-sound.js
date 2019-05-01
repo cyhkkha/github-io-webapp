@@ -4,17 +4,9 @@ import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Tabs from 'antd/lib/tabs';
 import Select from 'antd/lib/select';
-import Stander from './soundUtils';
+import { guitarString } from './guitarUtils';
 
 export default class FretSound extends React.Component {
-    fScope = [...Array(25)
-        .fill().keys()]
-        .map(o => <Select.Option key={o} value={o}>{o}</Select.Option>);
-
-    sScope = [...Array(7)
-        .fill().keys()]
-        .map(o => <Select.Option key={o} value={o}>{o}</Select.Option>);
-
     state = {
         string: Math.floor(Math.random() * 6 + 1),
         fret: Math.floor(Math.random() * 12 + 1),
@@ -24,38 +16,40 @@ export default class FretSound extends React.Component {
         fFrom: 0,
         fTo: 12,
         answer: '',
+        correct: null,
+        stringType: 'standard',
     };
 
     constructor(props) {
         super(props);
-        this.sScope.shift();
+        this.fScope = [...Array(25)
+            .fill('').keys()]
+            .map(o => <Select.Option key={o} value={o}>{o}</Select.Option>);
     }
 
     handleRedo = () => {
-        const { sFrom, sTo, fFrom, fTo } = this.state;
+        const { sFrom, sTo, fFrom, fTo, stringType } = this.state;
+        const fret = Math.floor(Math.random() * (fTo - fFrom + 1) + fFrom);
+        const string = Math.floor(Math.random() * (sTo - sFrom + 1) + sFrom);
+        let correct = guitarString[stringType][string - 1];
+        for (let i = 0; i < fret; i += 1) {
+            correct = correct.next;
+        }
         this.setState({
-            fret: Math.floor(Math.random() * (fTo - fFrom + 1) + fFrom),
-            string: Math.floor(Math.random() * (sTo - sFrom + 1) + sFrom),
+            fret,
+            string,
+            correct,
             checked: null,
         });
-    }
+    };
 
     handleCheck = () => {
-        const { string, answer } = this.state;
-        let { fret } = this.state;
-        let note = Stander[Number(string)];
-        fret = Number(fret);
-        while (fret > 0) {
-            note = note.next;
-            fret -= 1;
-        }
-        const checked = note.equalOf(answer)
+        const { answer, correct } = this.state;
+        const checked = correct.is(answer)
             ? <span style={{ color: 'green' }}>回答正确</span>
-            : <span style={{ color: 'red' }}>回答错误，正确答案是{note.getFlag()}或{note.getSing()}</span>;
-        this.setState({
-            checked,
-        });
-    }
+            : <span style={{ color: 'red' }}>回答错误，正确答案是{correct.name}或{correct.level}</span>;
+        this.setState({ checked });
+    };
 
     fixFret(f, t, isFrom) {
         let fFrom = f;
@@ -90,7 +84,9 @@ export default class FretSound extends React.Component {
     }
 
     render() {
-        const { fFrom, fTo, sFrom, sTo, fret, string, checked } = this.state;
+        const { fFrom, fTo, sFrom, sTo, fret, string, checked, stringType } = this.state;
+        const sScope = guitarString[stringType]
+            .map((e, i) => <Select.Option value={i + 1} key={e.name}>{i + 1}</Select.Option>);
         return (
             <Card title="指板音练习" style={{ width: 400 }}>
                 <Tabs defaultActiveKey="play">
@@ -100,16 +96,27 @@ export default class FretSound extends React.Component {
                             <span><strong>弦数：</strong>{string}</span>
                         </p>
                         <p><strong>品数：</strong>{fret}</p>
-                        <p>
+                        <div>
                             <Input
                                 placeholder="请输入正确的音符"
                                 style={{ width: '150px' }}
                                 onChange={(e) => { this.setState({ answer: e.target.value }); }}
                             />
-                            <Button type="primary" className="ml-ss" onClick={this.handleCheck}>验证</Button>
-                            <Button type="circle" className="ml-ss" icon="redo" onClick={this.handleRedo} />
-                            <br />{checked}
-                        </p>
+                            <Button
+                                type="primary"
+                                className="ml-ss"
+                                onClick={this.handleCheck}
+                                htmlType="button"
+                            >验证</Button>
+                            <Button
+                                type="circle"
+                                className="ml-ss"
+                                icon="redo"
+                                onClick={this.handleRedo}
+                                htmlType="button"
+                            />
+                            <p>{checked}</p>
+                        </div>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="设置" key="setting">
                         <p>品格范围：</p>
@@ -140,7 +147,7 @@ export default class FretSound extends React.Component {
                                 style={{ width: 100 }}
                                 onChange={(value) => { this.fixString(value, sTo, true); }}
                             >
-                                {this.sScope}
+                                {sScope}
                             </Select>
                             <span className="ml-ss">到：</span>
                             <Select
@@ -148,7 +155,7 @@ export default class FretSound extends React.Component {
                                 style={{ width: 100 }}
                                 onChange={(value) => { this.fixString(sFrom, value, false); }}
                             >
-                                {this.sScope}
+                                {sScope}
                             </Select>
                             <span className="ml-ss">弦</span>
                         </div>
