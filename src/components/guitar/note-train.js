@@ -55,7 +55,7 @@ export default class NoteTrain extends React.Component {
     handleCheck = () => {
         const { fret, answer } = this.state;
         const fretAnswer = Number(answer);
-        const checked = fretAnswer === fret || fretAnswer === fret + 12
+        const checked = fretAnswer === fret || fretAnswer === fret + 12 || fretAnswer === fret - 12
             ? <span style={{ color: 'green' }}>回答正确</span>
             : <span style={{ color: 'red' }}>回答错误，正确答案是第{fret}品</span>;
         this.setState({
