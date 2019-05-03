@@ -4,10 +4,9 @@ import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Tabs from 'antd/lib/tabs';
 import Select from 'antd/lib/select';
-import CheckBox from 'antd/lib/checkbox';
 import { guitarString } from './guitarUtils';
 
-export default class StringTrain extends React.Component {
+export default class NoteTrain extends React.Component {
     constructor(ps) {
         super(ps);
         this.fretOption = [...Array(25)
@@ -22,8 +21,6 @@ export default class StringTrain extends React.Component {
         string: 6,
         // 品数
         fret: 0,
-        // 是否为给出音找弦
-        reverse: false,
         // 从xx品开始
         fFrom: 0,
         // 从xx品结束
@@ -31,42 +28,35 @@ export default class StringTrain extends React.Component {
         // 玩家的回答
         answer: '',
         // 正确的音
-        correct: null,
+        sound: null,
         // 点击检查后显示的内容
         checked: null,
     };
 
-    componentDidMount() {
+    componentWillMount() {
         this.handleRedo();
     }
 
     handleRedo = () => {
         const { fFrom, fTo, string, stringType } = this.state;
         const fret = Math.floor(Math.random() * (fTo - fFrom + 1) + fFrom);
-        let correct = guitarString[stringType][string - 1];
+        let sound = guitarString[stringType][string - 1];
         for (let i = 0; i < fret; i += 1) {
-            correct = correct.next;
+            sound = sound.next;
         }
         this.setState({
             fret,
-            correct,
+            sound,
             checked: null,
         });
     };
 
     handleCheck = () => {
-        const { fret, answer, reverse, correct } = this.state;
-        let checked = null;
-        if (!reverse) {
-            checked = correct.is(answer)
-                ? <span style={{ color: 'green' }}>回答正确</span>
-                : <span style={{ color: 'red' }}>回答错误，正确答案是{correct.name}或{correct.level}</span>;
-        } else {
-            const fretAnswer = Number(answer);
-            checked = fretAnswer === fret || fretAnswer === fret + 12
-                ? <span style={{ color: 'green' }}>回答正确</span>
-                : <span style={{ color: 'red' }}>回答错误，正确答案是第{fret}品</span>;
-        }
+        const { fret, answer } = this.state;
+        const fretAnswer = Number(answer);
+        const checked = fretAnswer === fret || fretAnswer === fret + 12
+            ? <span style={{ color: 'green' }}>回答正确</span>
+            : <span style={{ color: 'red' }}>回答错误，正确答案是第{fret}品</span>;
         this.setState({
             checked,
         });
@@ -89,12 +79,12 @@ export default class StringTrain extends React.Component {
     }
 
     render() {
-        const { fFrom, fTo, fret, string, checked, reverse, correct, stringType } = this.state;
+        const { fFrom, fTo, string, checked, sound, stringType } = this.state;
         return (
-            <Card title="弦音练习" style={{ width: 400 }} className="ml-s">
+            <Card style={{ width: 400 }} className="mr-s mb-s">
                 <Tabs defaultActiveKey="play">
-                    <Tabs.TabPane tab={reverse ? '随机品格' : '随机音符'} key="play">
-                        <p>根据提示，写出对应位置的{reverse ? '品格' : '音符'}</p>
+                    <Tabs.TabPane tab="音符练习" key="play">
+                        <p>根据提示，写出对应位置的品格</p>
                         <div className="mb-s">
                             <strong>弦数：</strong>
                             <Select
@@ -106,13 +96,10 @@ export default class StringTrain extends React.Component {
                                     .map((e, i) => <Select.Option value={i + 1} key={e.name}>{i + 1}</Select.Option>)}
                             </Select>
                         </div>
-                        {reverse
-                            ? <p><strong>音名：</strong>{correct.name}</p>
-                            : <p><strong>品数：</strong>{fret}</p>
-                        }
+                        <p><strong>音名：</strong>{sound.name}</p>
                         <div>
                             <Input
-                                placeholder={reverse ? '请输入正确的品数' : '请输入正确的音符'}
+                                placeholder="请输入正确的品数"
                                 style={{ width: '150px' }}
                                 onChange={(e) => { this.setState({ answer: e.target.value.trim() }); }}
                             />
@@ -133,14 +120,6 @@ export default class StringTrain extends React.Component {
                         </div>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="设置" key="setting">
-                        <div className="mb-s">
-                            <CheckBox
-                                checked={reverse}
-                                onChange={(e) => { this.setState({ reverse: e.target.checked }); }}
-                            >
-                                通过给出的音找品格：
-                            </CheckBox>
-                        </div>
                         <div className="mb-s">
                             <span>调弦方式：</span>
                             <Select

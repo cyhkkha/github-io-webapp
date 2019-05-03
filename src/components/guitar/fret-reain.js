@@ -6,17 +6,16 @@ import Tabs from 'antd/lib/tabs';
 import Select from 'antd/lib/select';
 import { guitarString } from './guitarUtils';
 
-export default class FretSound extends React.Component {
+export default class FretTrain extends React.Component {
     state = {
-        string: Math.floor(Math.random() * 6 + 1),
-        fret: Math.floor(Math.random() * 12 + 1),
+        string: 1,
+        fret: 0,
         checked: null,
         sFrom: 1,
         sTo: 6,
         fFrom: 0,
         fTo: 12,
         answer: '',
-        correct: null,
         stringType: 'standard',
     };
 
@@ -27,24 +26,27 @@ export default class FretSound extends React.Component {
             .map(o => <Select.Option key={o} value={o}>{o}</Select.Option>);
     }
 
+    componentWillMount() {
+        this.handleRedo();
+    }
+
     handleRedo = () => {
-        const { sFrom, sTo, fFrom, fTo, stringType } = this.state;
+        const { sFrom, sTo, fFrom, fTo } = this.state;
         const fret = Math.floor(Math.random() * (fTo - fFrom + 1) + fFrom);
         const string = Math.floor(Math.random() * (sTo - sFrom + 1) + sFrom);
-        let correct = guitarString[stringType][string - 1];
-        for (let i = 0; i < fret; i += 1) {
-            correct = correct.next;
-        }
         this.setState({
             fret,
             string,
-            correct,
             checked: null,
         });
     };
 
     handleCheck = () => {
-        const { answer, correct } = this.state;
+        const { answer, stringType, string, fret } = this.state;
+        let correct = guitarString[stringType][string - 1];
+        for (let i = 0; i < fret; i += 1) {
+            correct = correct.next;
+        }
         const checked = correct.is(answer)
             ? <span style={{ color: 'green' }}>回答正确</span>
             : <span style={{ color: 'red' }}>回答错误，正确答案是{correct.name}或{correct.level}</span>;
@@ -88,9 +90,9 @@ export default class FretSound extends React.Component {
         const sScope = guitarString[stringType]
             .map((e, i) => <Select.Option value={i + 1} key={e.name}>{i + 1}</Select.Option>);
         return (
-            <Card title="指板音练习" style={{ width: 400 }}>
+            <Card className="mr-s mb-s" style={{ width: 400 }}>
                 <Tabs defaultActiveKey="play">
-                    <Tabs.TabPane tab="随机音符" key="play">
+                    <Tabs.TabPane tab="指板练习" key="play">
                         <p>根据提示，写出对应位置的音名</p>
                         <p>
                             <span><strong>弦数：</strong>{string}</span>
@@ -119,8 +121,19 @@ export default class FretSound extends React.Component {
                         </div>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="设置" key="setting">
+                        <div className="mb-s">
+                            <span>调弦方式：</span>
+                            <Select
+                                value={stringType}
+                                style={{ width: 100 }}
+                                onChange={(value) => { this.setState({ stringType: value }); }}
+                            >
+                                {Object.keys(guitarString)
+                                    .map(name => <Select.Option key={name} value={name}>{name}</Select.Option>)}
+                            </Select>
+                        </div>
                         <p>品格范围：</p>
-                        <div>
+                        <div className="mb-s">
                             <span>从：</span>
                             <Select
                                 value={fFrom}
@@ -140,7 +153,7 @@ export default class FretSound extends React.Component {
                             <span className="ml-ss">品</span>
                         </div>
                         <p>弦范围：</p>
-                        <div>
+                        <div className="mb-s">
                             <span>从：</span>
                             <Select
                                 value={sFrom}

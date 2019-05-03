@@ -1,5 +1,5 @@
 import sound from './sound.json';
-import guitarString from './guitarString';
+import guitarString from './guitarString.json';
 import scale from './scale.json';
 
 sound.forEach((e, i) => {

@@ -26,12 +26,21 @@
     justify-content: flex-start;
 }
 
+.mov-top-s {
+    position: relative;
+    top: -1em;
+}
+
 .ml-ss {
     margin-left: 0.5em;
 }
 
 .ml-s {
     margin-left: 1em;
+}
+
+.mr-s {
+    margin-right: 1em;
 }
 
 .mb-s {
