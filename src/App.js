@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Navbar from './components/layout/Navbar';
-import FretTrain from './components/guitar/fret-reain';
+import FretTrain from './components/guitar/fret-train';
 import NoteTrain from './components/guitar/note-train';
 import TablatureTrain from './components/guitar/tablature-train';
 

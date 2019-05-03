@@ -48,6 +48,7 @@ export default class NoteTrain extends React.Component {
             fret,
             sound,
             checked: null,
+            answer: '',
         });
     };
 
@@ -79,9 +80,9 @@ export default class NoteTrain extends React.Component {
     }
 
     render() {
-        const { fFrom, fTo, string, checked, sound, stringType } = this.state;
+        const { fFrom, fTo, string, checked, sound, stringType, answer } = this.state;
         return (
-            <Card style={{ width: 400 }} className="mr-s mb-s">
+            <Card className="guitar-card-size">
                 <Tabs defaultActiveKey="play">
                     <Tabs.TabPane tab="音符练习" key="play">
                         <p>根据提示，写出对应位置的品格</p>
@@ -89,7 +90,7 @@ export default class NoteTrain extends React.Component {
                             <strong>弦数：</strong>
                             <Select
                                 value={string}
-                                style={{ width: 100 }}
+                                className="guitar-ele-m"
                                 onChange={(value) => { this.setState({ string: value }); }}
                             >
                                 {guitarString[stringType]
@@ -99,8 +100,9 @@ export default class NoteTrain extends React.Component {
                         <p><strong>音名：</strong>{sound.name}</p>
                         <div>
                             <Input
+                                value={answer}
                                 placeholder="请输入正确的品数"
-                                style={{ width: '150px' }}
+                                className="guitar-ele-l"
                                 onChange={(e) => { this.setState({ answer: e.target.value.trim() }); }}
                             />
                             <Button
@@ -116,27 +118,27 @@ export default class NoteTrain extends React.Component {
                                 onClick={this.handleRedo}
                                 htmlType="button"
                             />
-                            <p>{checked}</p>
+                            <div style={{ height: '2em' }}>{checked}</div>
                         </div>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="设置" key="setting">
                         <div className="mb-s">
-                            <span>调弦方式：</span>
+                            <strong>调弦方式：</strong>
                             <Select
                                 value={stringType}
-                                style={{ width: 100 }}
+                                className="guitar-ele-m"
                                 onChange={(value) => { this.setState({ stringType: value, string: 1 }); }}
                             >
                                 {Object.keys(guitarString)
                                     .map(name => <Select.Option key={name} value={name}>{name}</Select.Option>)}
                             </Select>
                         </div>
-                        <p>品格范围：</p>
+                        <p><strong>品格范围：</strong></p>
                         <div className="mb-s">
                             <span>从：</span>
                             <Select
                                 value={fFrom}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixFret(value, fTo, true); }}
                             >
                                 {this.fretOption}
@@ -144,7 +146,7 @@ export default class NoteTrain extends React.Component {
                             <span className="ml-ss">到：</span>
                             <Select
                                 value={fTo}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixFret(fFrom, value, false); }}
                             >
                                 {this.fretOption}

@@ -1,6 +1,6 @@
 import React from 'react';
 import Menu from 'antd/lib/menu';
-import Input from 'antd/lib/input';
+// import Input from 'antd/lib/input';
 import './Navbar.css';
 
 export default class Navbar extends React.Component {
@@ -27,11 +27,11 @@ export default class Navbar extends React.Component {
                     <a href="./#">
                         <h1 className="nav-title ds-ib">Feinimouse</h1>
                     </a>
-                    <Input.Search
+                    {/* <Input.Search
                         placeholder="搜索"
                         onSearch={this.handleSearch}
                         className="nav-search"
-                    />
+                    /> */}
                 </div>
                 <nav className="ds-ib">
                     <Menu

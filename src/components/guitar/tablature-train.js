@@ -71,7 +71,7 @@ export default class TablatureTrain extends React.Component {
                     ? <span className="ml-s" style={{ color: 'green' }}>回答正确</span>
                     : (
                         <span className="ml-s" style={{ color: 'red' }}>
-                            {`${correct.name}/${correct.level}`}
+                            {`${correct.name}或${correct.level}`}
                         </span>
                     );
             }
@@ -112,11 +112,11 @@ export default class TablatureTrain extends React.Component {
     };
 
     render() {
-        const { frets, checks, sFrom, sTo, fFrom, fTo, stringType } = this.state;
+        const { frets, checks, sFrom, sTo, fFrom, fTo, stringType, answers } = this.state;
         const sScope = guitarString[stringType]
             .map((e, i) => <Select.Option value={i + 1} key={e.name}>{i + 1}</Select.Option>);
         return (
-            <Card className="mr-s mb-s" style={{ width: 400 }}>
+            <Card className="guitar-card-size">
                 <Tabs defaultActiveKey="play">
                     <Tabs.TabPane tab="识谱练习" key="play">
                         <p>根据六线谱，写出对应位置的音符</p>
@@ -124,18 +124,18 @@ export default class TablatureTrain extends React.Component {
                             {frets.map(({ fret, disabled }, index) => (
                                 <div key={index}>
                                     <span>
-                                        ———
+                                        ——
                                         <strong
                                             className="ds-ib"
                                             style={{ width: '2em', textAlign: 'center' }}
                                         >{fret}</strong>
-                                        ———
+                                        ——
                                     </span>
                                     <Input
+                                        value={answers[index]}
                                         disabled={disabled}
                                         placeholder="请输入音符"
-                                        className="ml-s"
-                                        style={{ width: '100px' }}
+                                        className="ml-s guitar-ele-m"
                                         onChange={e => this.handelAnswerChange(index, e)}
                                     />
                                     <span>{checks[index]}</span>
@@ -160,22 +160,22 @@ export default class TablatureTrain extends React.Component {
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="设置" key="setting">
                         <div className="mb-s">
-                            <span>调弦方式：</span>
+                            <strong>调弦方式：</strong>
                             <Select
                                 value={stringType}
-                                style={{ width: 100 }}
+                                className="guitar-ele-m"
                                 onChange={(value) => { this.setState({ stringType: value }); }}
                             >
                                 {Object.keys(guitarString)
                                     .map(name => <Select.Option key={name} value={name}>{name}</Select.Option>)}
                             </Select>
                         </div>
-                        <p>品格范围：</p>
+                        <p><strong>品格范围：</strong></p>
                         <div className="mb-s">
                             <span>从：</span>
                             <Select
                                 value={fFrom}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixFret(value, fTo, true); }}
                             >
                                 {this.fScope}
@@ -183,19 +183,19 @@ export default class TablatureTrain extends React.Component {
                             <span className="ml-ss">到：</span>
                             <Select
                                 value={fTo}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixFret(fFrom, value, false); }}
                             >
                                 {this.fScope}
                             </Select>
                             <span className="ml-ss">品</span>
                         </div>
-                        <p>弦范围：</p>
+                        <p><strong>弦范围：</strong></p>
                         <div className="mb-s">
                             <span>从：</span>
                             <Select
                                 value={sFrom}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixString(value, sTo, true); }}
                             >
                                 {sScope}
@@ -203,7 +203,7 @@ export default class TablatureTrain extends React.Component {
                             <span className="ml-ss">到：</span>
                             <Select
                                 value={sTo}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixString(sFrom, value, false); }}
                             >
                                 {sScope}

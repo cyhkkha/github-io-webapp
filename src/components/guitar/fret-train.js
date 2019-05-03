@@ -38,6 +38,7 @@ export default class FretTrain extends React.Component {
             fret,
             string,
             checked: null,
+            answer: '',
         });
     };
 
@@ -86,11 +87,11 @@ export default class FretTrain extends React.Component {
     }
 
     render() {
-        const { fFrom, fTo, sFrom, sTo, fret, string, checked, stringType } = this.state;
+        const { fFrom, fTo, sFrom, sTo, fret, string, checked, stringType, answer } = this.state;
         const sScope = guitarString[stringType]
             .map((e, i) => <Select.Option value={i + 1} key={e.name}>{i + 1}</Select.Option>);
         return (
-            <Card className="mr-s mb-s" style={{ width: 400 }}>
+            <Card className="guitar-card-size">
                 <Tabs defaultActiveKey="play">
                     <Tabs.TabPane tab="指板练习" key="play">
                         <p>根据提示，写出对应位置的音名</p>
@@ -100,9 +101,10 @@ export default class FretTrain extends React.Component {
                         <p><strong>品数：</strong>{fret}</p>
                         <div>
                             <Input
+                                value={answer}
                                 placeholder="请输入正确的音符"
-                                style={{ width: '150px' }}
-                                onChange={(e) => { this.setState({ answer: e.target.value }); }}
+                                className="guitar-ele-l"
+                                onChange={(e) => { this.setState({ answer: e.target.value.trim() }); }}
                             />
                             <Button
                                 type="primary"
@@ -117,27 +119,27 @@ export default class FretTrain extends React.Component {
                                 onClick={this.handleRedo}
                                 htmlType="button"
                             />
-                            <p>{checked}</p>
+                            <div style={{ height: '2em' }}>{checked}</div>
                         </div>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="设置" key="setting">
                         <div className="mb-s">
-                            <span>调弦方式：</span>
+                            <strong>调弦方式：</strong>
                             <Select
                                 value={stringType}
-                                style={{ width: 100 }}
+                                className="guitar-ele-m"
                                 onChange={(value) => { this.setState({ stringType: value }); }}
                             >
                                 {Object.keys(guitarString)
                                     .map(name => <Select.Option key={name} value={name}>{name}</Select.Option>)}
                             </Select>
                         </div>
-                        <p>品格范围：</p>
+                        <p><strong>品格范围：</strong></p>
                         <div className="mb-s">
                             <span>从：</span>
                             <Select
                                 value={fFrom}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixFret(value, fTo, true); }}
                             >
                                 {this.fScope}
@@ -145,19 +147,19 @@ export default class FretTrain extends React.Component {
                             <span className="ml-ss">到：</span>
                             <Select
                                 value={fTo}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixFret(fFrom, value, false); }}
                             >
                                 {this.fScope}
                             </Select>
                             <span className="ml-ss">品</span>
                         </div>
-                        <p>弦范围：</p>
+                        <p><strong>弦范围：</strong></p>
                         <div className="mb-s">
                             <span>从：</span>
                             <Select
                                 value={sFrom}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixString(value, sTo, true); }}
                             >
                                 {sScope}
@@ -165,7 +167,7 @@ export default class FretTrain extends React.Component {
                             <span className="ml-ss">到：</span>
                             <Select
                                 value={sTo}
-                                style={{ width: 100 }}
+                                className="guitar-ele-s"
                                 onChange={(value) => { this.fixString(sFrom, value, false); }}
                             >
                                 {sScope}

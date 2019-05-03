@@ -1,0 +1,16 @@
+.guitar-card-size {
+    width: 350px;
+    margin: 0.5rem
+}
+
+.guitar-ele-l {
+    width: 150px;
+}
+
+.guitar-ele-m {
+    width: 100px;
+}
+
+.guitar-ele-s {
+    width: 80px;
+}
